@@ -49,6 +49,33 @@ async function run() {
       res.send(result);
     });
 
+    app.put("/coffee/:id/update", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedCoffee = req.body;
+
+      const updatedData = {
+        $set: {
+          name: updatedCoffee.name,
+          chef: updatedCoffee.chef,
+          supplier: updatedCoffee.supplier,
+          taste: updatedCoffee.taste,
+          category: updatedCoffee.category,
+          details: updatedCoffee.details,
+          photo: updatedCoffee.photo,
+        },
+      };
+
+      const result = await coffeeCollection.updateOne(
+        filter,
+        updatedData,
+        options
+      );
+
+      res.send(result);
+    });
+
     app.delete("/delete/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
